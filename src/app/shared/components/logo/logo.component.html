@@ -1,0 +1,22 @@
+<a [routerLink]="link" class="flex items-center space-x-3 group" [class]="wrapperClass">
+  <!-- Logo con icono de gato -->
+  <div class="relative">
+    <div [class]="iconContainerClass">
+      <!-- Icono de gato con Material Icons -->
+      <span class="material-icons text-white" [class]="iconClass">pets</span>
+    </div>
+    <!-- Efecto de brillo sutil -->
+    <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl"></div>
+  </div>
+  
+  <!-- Texto del logo -->
+  <div class="flex flex-col" *ngIf="showText">
+    <span [class]="titleClass">
+      Cats App
+    </span>
+    <span [class]="subtitleClass" *ngIf="showSubtitle">
+      Razas & Imágenes
+    </span>
+  </div>
+</a>
+

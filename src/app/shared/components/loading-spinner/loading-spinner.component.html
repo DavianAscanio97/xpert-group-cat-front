@@ -1,0 +1,35 @@
+<div class="loading-wrapper" [class]="wrapperClass">
+  <!-- Loading tipo 1: Spinner simple -->
+  <div *ngIf="type === 'simple'" class="loading-simple">
+    <div class="spinner-simple"></div>
+    <p *ngIf="message" class="loading-message">{{ message }}</p>
+  </div>
+
+  <!-- Loading tipo 2: Spinner con logo -->
+  <div *ngIf="type === 'logo'" class="loading-logo">
+    <div class="logo-container">
+      <span class="material-icons">pets</span>
+    </div>
+    <div class="spinner-logo"></div>
+    <p *ngIf="message" class="loading-message">{{ message }}</p>
+  </div>
+
+  <!-- Loading tipo 3: Dots animados -->
+  <div *ngIf="type === 'dots'" class="loading-dots">
+    <div class="dots-container">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <p *ngIf="message" class="loading-message">{{ message }}</p>
+  </div>
+
+  <!-- Loading tipo 4: Pulse -->
+  <div *ngIf="type === 'pulse'" class="loading-pulse">
+    <div class="pulse-container">
+      <div class="pulse-circle"></div>
+    </div>
+    <p *ngIf="message" class="loading-message">{{ message }}</p>
+  </div>
+</div>
+

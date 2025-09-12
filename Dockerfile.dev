@@ -1,0 +1,23 @@
+# Dockerfile para desarrollo del frontend de Cats App
+FROM node:20-alpine
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache wget
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos de dependencias
+COPY package*.json ./
+
+# Instala todas las dependencias (incluyendo devDependencies)
+RUN npm install
+
+# Expone el puerto 4200 (puerto por defecto de Angular)
+EXPOSE 4200
+
+# Variables de entorno para desarrollo
+ENV NODE_ENV=development
+
+# Comando por defecto para desarrollo
+CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "4200"]

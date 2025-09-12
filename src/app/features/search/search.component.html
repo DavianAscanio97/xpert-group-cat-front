@@ -1,0 +1,203 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Búsqueda de Razas</h1>
+        <p class="text-gray-600">Encuentra la raza de gato perfecta para ti</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Form -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <form [formGroup]="searchForm" class="space-y-4">
+        <!-- Search Input -->
+        <div>
+          <label for="searchTerm" class="form-label">
+            Buscar por nombre (opcional)
+          </label>
+          <input
+            id="searchTerm"
+            type="text"
+            formControlName="searchTerm"
+            class="form-input"
+            placeholder="Ej: persian, siamese, maine coon... (opcional)">
+        </div>
+
+        <!-- Filters -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Affection Level -->
+          <div>
+            <label class="form-label">Nivel de afecto</label>
+            <select formControlName="affectionLevel" class="form-input">
+              <option value="">Cualquiera</option>
+              <option value="1">Muy bajo (1)</option>
+              <option value="2">Bajo (2)</option>
+              <option value="3">Medio (3)</option>
+              <option value="4">Alto (4)</option>
+              <option value="5">Muy alto (5)</option>
+            </select>
+          </div>
+
+          <!-- Energy Level -->
+          <div>
+            <label class="form-label">Nivel de energía</label>
+            <select formControlName="energyLevel" class="form-input">
+              <option value="">Cualquiera</option>
+              <option value="1">Muy bajo (1)</option>
+              <option value="2">Bajo (2)</option>
+              <option value="3">Medio (3)</option>
+              <option value="4">Alto (4)</option>
+              <option value="5">Muy alto (5)</option>
+            </select>
+          </div>
+
+          <!-- Child Friendly -->
+          <div>
+            <label class="form-label">Amigable con niños</label>
+            <select formControlName="childFriendly" class="form-input">
+              <option value="">Cualquiera</option>
+              <option value="1">Muy bajo (1)</option>
+              <option value="2">Bajo (2)</option>
+              <option value="3">Medio (3)</option>
+              <option value="4">Alto (4)</option>
+              <option value="5">Muy alto (5)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Special Features -->
+        <div>
+          <label class="form-label">Características especiales</label>
+          <div class="flex flex-wrap gap-4 mt-2">
+            <label class="flex items-center">
+              <input type="checkbox" formControlName="hypoallergenic" class="mr-2">
+              <span class="text-sm text-gray-700">Hipoalergénico</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" formControlName="hairless" class="mr-2">
+              <span class="text-sm text-gray-700">Sin pelo</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" formControlName="natural" class="mr-2">
+              <span class="text-sm text-gray-700">Natural</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" formControlName="rare" class="mr-2">
+              <span class="text-sm text-gray-700">Raro</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Search Button -->
+        <div class="flex justify-end">
+          <button
+            type="button"
+            (click)="performSearch()"
+            [disabled]="isSearching"
+            class="btn-primary">
+            <span *ngIf="isSearching" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Buscando...
+            </span>
+            <span *ngIf="!isSearching">Buscar</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Search Results -->
+    <div *ngIf="hasSearched">
+      <!-- Results Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">
+          Resultados de búsqueda
+          <span *ngIf="searchResults.length > 0" class="text-lg font-normal text-gray-600">
+            ({{ searchResults.length }} encontrados)
+          </span>
+        </h2>
+        <button 
+          *ngIf="searchResults.length > 0"
+          (click)="clearSearch()"
+          class="btn-secondary">
+          Limpiar búsqueda
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isSearching" class="flex justify-center py-12">
+        <div class="loading-spinner"></div>
+      </div>
+
+      <!-- Results Grid -->
+      <div *ngIf="!isSearching && searchResults.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let breed of searchResults" class="card hover:shadow-lg transition-shadow duration-300">
+          <div class="card-body">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ breed.name }}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+              {{ breed.description || 'Descripción no disponible' }}
+            </p>
+            
+            <!-- Breed Info -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div *ngIf="breed.origin" class="text-sm">
+                <span class="font-medium text-gray-700">Origen:</span>
+                <span class="text-gray-600 ml-1">{{ breed.origin }}</span>
+              </div>
+              <div *ngIf="breed.life_span" class="text-sm">
+                <span class="font-medium text-gray-700">Vida:</span>
+                <span class="text-gray-600 ml-1">{{ breed.life_span }}</span>
+              </div>
+            </div>
+
+            <!-- Characteristics -->
+            <div class="space-y-2 mb-4">
+              <div *ngIf="breed.affection_level" class="flex items-center justify-between text-sm">
+                <span class="text-gray-700">Afecto:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-3 h-3 rounded-full"
+                       [class]="i <= breed.affection_level ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.energy_level" class="flex items-center justify-between text-sm">
+                <span class="text-gray-700">Energía:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-3 h-3 rounded-full"
+                       [class]="i <= breed.energy_level ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a [routerLink]="['/breeds', breed.id]" 
+               class="btn-primary w-full text-center">
+              Ver Detalles
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Results -->
+      <div *ngIf="!isSearching && searchResults.length === 0" class="text-center py-12">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No se encontraron resultados</h3>
+        <p class="text-gray-600 mb-4">Intenta ajustar tus criterios de búsqueda.</p>
+        <button (click)="clearSearch()" class="btn-primary">
+          Limpiar búsqueda
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

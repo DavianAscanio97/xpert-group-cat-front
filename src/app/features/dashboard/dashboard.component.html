@@ -1,0 +1,143 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-primary-500 to-primary-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-center">
+        
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+          Bienvenido a Cats App
+        </h1>
+        <p class="text-xl text-primary-100 mb-8 max-w-3xl mx-auto">
+          Explora el fascinante mundo de los gatos. Descubre razas, características 
+          y hermosas imágenes de nuestros amigos felinos.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a routerLink="/breeds" class="btn-outline bg-white text-primary-500 hover:bg-primary-50">
+            Explorar Razas
+          </a>
+          <a routerLink="/images" class="btn-outline bg-white text-primary-500 hover:bg-primary-50">
+            Ver Imágenes
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <!-- Stat 1 -->
+      <div class="card text-center">
+        <div class="card-body">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons text-primary-500 text-2xl">pets</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ totalBreeds }}</h3>
+          <p class="text-gray-600">Razas de Gatos</p>
+        </div>
+      </div>
+
+      <!-- Stat 2 -->
+      <div class="card text-center">
+        <div class="card-body">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons text-primary-500 text-2xl">photo_library</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ totalImages }}</h3>
+          <p class="text-gray-600">Imágenes Disponibles</p>
+        </div>
+      </div>
+
+      <!-- Stat 3 -->
+      <div class="card text-center">
+        <div class="card-body">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons text-primary-500 text-2xl">person</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ userProfile?.email || 'Usuario' }}</h3>
+          <p class="text-gray-600">Bienvenido</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popular Breeds Section -->
+    <div class="mb-16">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Razas Populares</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Descubre las razas de gatos más populares y sus características únicas
+        </p>
+      </div>
+
+      <div *ngIf="isLoadingBreeds" class="py-12">
+        <app-loading-spinner 
+          type="logo" 
+          message="Cargando razas de gatos..."
+          size="medium">
+        </app-loading-spinner>
+      </div>
+
+      <div *ngIf="!isLoadingBreeds && popularBreeds.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let breed of popularBreeds" class="card hover:shadow-lg transition-shadow duration-300">
+          <div class="card-body">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ breed.name }}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+              {{ breed.description || 'Descripción no disponible' }}
+            </p>
+            
+            <!-- Características -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div *ngIf="breed.origin" class="text-sm">
+                <span class="font-medium text-gray-700">Origen:</span>
+                <span class="text-gray-600 ml-1">{{ breed.origin }}</span>
+              </div>
+              <div *ngIf="breed.life_span" class="text-sm">
+                <span class="font-medium text-gray-700">Vida:</span>
+                <span class="text-gray-600 ml-1">{{ breed.life_span }}</span>
+              </div>
+            </div>
+
+            <!-- Niveles de características -->
+            <div class="space-y-2 mb-4">
+              <div *ngIf="breed.affection_level" class="flex items-center justify-between text-sm">
+                <span class="text-gray-700">Afecto:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-3 h-3 rounded-full"
+                       [class]="i <= breed.affection_level ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.energy_level" class="flex items-center justify-between text-sm">
+                <span class="text-gray-700">Energía:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-3 h-3 rounded-full"
+                       [class]="i <= breed.energy_level ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a [routerLink]="['/breeds', breed.id]" 
+               class="btn-primary w-full text-center">
+              Ver Detalles
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoadingBreeds && popularBreeds.length === 0" class="text-center py-12">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="material-icons text-gray-400 text-4xl">pets</span>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No hay razas disponibles</h3>
+        <p class="text-gray-600">Intenta recargar la página o contacta con soporte.</p>
+      </div>
+    </div>
+
+    
+
+  </div>
+</div>
+

@@ -1,0 +1,82 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Razas de Gatos</h1>
+        <p class="text-gray-600">Explora las diferentes razas de gatos y sus características</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Breeds Grid -->
+    <div *ngIf="!isLoading && breeds.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let breed of breeds" class="card hover:shadow-lg transition-shadow duration-300">
+        <div class="card-body">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ breed.name }}</h3>
+          <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+            {{ breed.description || 'Descripción no disponible' }}
+          </p>
+          
+          <!-- Breed Info -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div *ngIf="breed.origin" class="text-sm">
+              <span class="font-medium text-gray-700">Origen:</span>
+              <span class="text-gray-600 ml-1">{{ breed.origin }}</span>
+            </div>
+            <div *ngIf="breed.life_span" class="text-sm">
+              <span class="font-medium text-gray-700">Vida:</span>
+              <span class="text-gray-600 ml-1">{{ breed.life_span }}</span>
+            </div>
+          </div>
+
+          <!-- Characteristics -->
+          <div class="space-y-2 mb-4">
+            <div *ngIf="breed.affection_level" class="flex items-center justify-between text-sm">
+              <span class="text-gray-700">Afecto:</span>
+              <div class="flex space-x-1">
+                <div *ngFor="let i of [1,2,3,4,5]" 
+                     class="w-3 h-3 rounded-full"
+                     [class]="i <= breed.affection_level ? 'bg-primary-500' : 'bg-gray-200'">
+                </div>
+              </div>
+            </div>
+            <div *ngIf="breed.energy_level" class="flex items-center justify-between text-sm">
+              <span class="text-gray-700">Energía:</span>
+              <div class="flex space-x-1">
+                <div *ngFor="let i of [1,2,3,4,5]" 
+                     class="w-3 h-3 rounded-full"
+                     [class]="i <= breed.energy_level ? 'bg-primary-500' : 'bg-gray-200'">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a [routerLink]="['/breeds', breed.id]" 
+             class="btn-primary w-full text-center">
+            Ver Detalles
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && breeds.length === 0" class="text-center py-12">
+      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No hay razas disponibles</h3>
+      <p class="text-gray-600">Intenta recargar la página o contacta con soporte.</p>
+    </div>
+  </div>
+</div>
+

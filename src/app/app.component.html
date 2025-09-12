@@ -1,0 +1,23 @@
+<div class="min-h-screen bg-gray-50 flex flex-col">
+  <!-- Header -->
+  <app-header 
+    [isAuthenticated]="isAuthenticated"
+    [userProfile]="userProfile"
+    (logout)="onLogout()">
+  </app-header>
+  
+  <!-- Main Content -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+  
+  <!-- Footer -->
+  <app-footer></app-footer>
+  
+  <!-- Loading Spinner Global -->
+  <app-loading-spinner 
+    *ngIf="isLoading"
+    [message]="loadingMessage">
+  </app-loading-spinner>
+</div>
+

@@ -1,0 +1,192 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center py-12">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Breed Detail -->
+  <div *ngIf="!isLoading && breed" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <button 
+        (click)="goBack()"
+        class="btn-secondary mb-4">
+        ← Volver
+      </button>
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ breed.name }}</h1>
+      <p *ngIf="breed.description" class="text-gray-600 text-lg">
+        {{ breed.description }}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Breed Information -->
+      <div class="space-y-6">
+        <!-- Basic Info -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-xl font-semibold text-gray-900">Información Básica</h2>
+          </div>
+          <div class="card-body">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div *ngIf="breed.origin">
+                <span class="font-medium text-gray-700">Origen:</span>
+                <span class="text-gray-600 ml-2">{{ breed.origin }}</span>
+              </div>
+              <div *ngIf="breed.life_span">
+                <span class="font-medium text-gray-700">Esperanza de vida:</span>
+                <span class="text-gray-600 ml-2">{{ breed.life_span }}</span>
+              </div>
+              <div *ngIf="breed.weight">
+                <span class="font-medium text-gray-700">Peso:</span>
+                <span class="text-gray-600 ml-2">{{ breed.weight.metric }} kg</span>
+              </div>
+              <div *ngIf="breed.temperament">
+                <span class="font-medium text-gray-700">Temperamento:</span>
+                <span class="text-gray-600 ml-2">{{ breed.temperament }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Characteristics -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-xl font-semibold text-gray-900">Características</h2>
+          </div>
+          <div class="card-body">
+            <div class="space-y-4">
+              <div *ngIf="breed.affection_level" class="flex items-center justify-between">
+                <span class="text-gray-700">Nivel de afecto:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-4 h-4 rounded-full"
+                       [class]="i <= breed.affection_level ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.energy_level" class="flex items-center justify-between">
+                <span class="text-gray-700">Nivel de energía:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-4 h-4 rounded-full"
+                       [class]="i <= breed.energy_level ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.child_friendly" class="flex items-center justify-between">
+                <span class="text-gray-700">Amigable con niños:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-4 h-4 rounded-full"
+                       [class]="i <= breed.child_friendly ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.dog_friendly" class="flex items-center justify-between">
+                <span class="text-gray-700">Amigable con perros:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-4 h-4 rounded-full"
+                       [class]="i <= breed.dog_friendly ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.grooming" class="flex items-center justify-between">
+                <span class="text-gray-700">Necesidades de aseo:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-4 h-4 rounded-full"
+                       [class]="i <= breed.grooming ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="breed.intelligence" class="flex items-center justify-between">
+                <span class="text-gray-700">Inteligencia:</span>
+                <div class="flex space-x-1">
+                  <div *ngFor="let i of [1,2,3,4,5]" 
+                       class="w-4 h-4 rounded-full"
+                       [class]="i <= breed.intelligence ? 'bg-primary-500' : 'bg-gray-200'">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Features -->
+        <div *ngIf="hasSpecialFeatures()" class="card">
+          <div class="card-header">
+            <h2 class="text-xl font-semibold text-gray-900">Características Especiales</h2>
+          </div>
+          <div class="card-body">
+            <div class="flex flex-wrap gap-2">
+              <span *ngIf="breed.hypoallergenic" class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                Hipoalergénico
+              </span>
+              <span *ngIf="breed.hairless" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                Sin pelo
+              </span>
+              <span *ngIf="breed.natural" class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                Natural
+              </span>
+              <span *ngIf="breed.rare" class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                Raro
+              </span>
+              <span *ngIf="breed.rex" class="px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm">
+                Rex
+              </span>
+              <span *ngIf="breed.short_legs" class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
+                Patas cortas
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="space-y-6">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-xl font-semibold text-gray-900">Imágenes</h2>
+          </div>
+          <div class="card-body">
+            <div *ngIf="isLoadingImages" class="flex justify-center py-8">
+              <div class="loading-spinner"></div>
+            </div>
+            
+            <div *ngIf="!isLoadingImages && images.length > 0" class="grid grid-cols-1 gap-4">
+              <div *ngFor="let image of images" class="relative">
+                <img 
+                  [src]="image.url" 
+                  [alt]="breed.name"
+                  class="w-full h-64 object-cover rounded-lg shadow-md">
+              </div>
+            </div>
+            
+            <div *ngIf="!isLoadingImages && images.length === 0" class="text-center py-8">
+              <p class="text-gray-500">No hay imágenes disponibles para esta raza.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !breed" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center py-12">
+      <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">Raza no encontrada</h3>
+      <p class="text-gray-600 mb-4">La raza que buscas no existe o ha sido eliminada.</p>
+      <button (click)="goBack()" class="btn-primary">
+        Volver a la lista
+      </button>
+    </div>
+  </div>
+</div>
+

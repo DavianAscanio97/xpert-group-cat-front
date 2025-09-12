@@ -1,0 +1,134 @@
+<header class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo y título -->
+      <div class="flex items-center">
+        <app-logo variant="default"></app-logo>
+      </div>
+
+      <!-- Navegación principal -->
+      <nav class="hidden md:flex space-x-8" *ngIf="isAuthenticated">
+        <a routerLink="/dashboard" 
+           routerLinkActive="text-primary-500 border-b-2 border-primary-500"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200">
+          Dashboard
+        </a>
+        <a routerLink="/breeds" 
+           routerLinkActive="text-primary-500 border-b-2 border-primary-500"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200">
+          Razas
+        </a>
+        <a routerLink="/images" 
+           routerLinkActive="text-primary-500 border-b-2 border-primary-500"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200">
+          Imágenes
+        </a>
+        <a routerLink="/search" 
+           routerLinkActive="text-primary-500 border-b-2 border-primary-500"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200">
+          Búsqueda
+        </a>
+        <a routerLink="/about" 
+           routerLinkActive="text-primary-500 border-b-2 border-primary-500"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200">
+          Acerca de
+        </a>
+      </nav>
+
+      <!-- Acciones del usuario -->
+      <div class="flex items-center space-x-4">
+        <ng-container *ngIf="isAuthenticated; else guestActions">
+          <!-- Menú de usuario autenticado -->
+          <div class="relative" #userMenu>
+            <button 
+              (click)="toggleUserMenu()"
+              class="flex items-center space-x-2 text-gray-700 hover:text-primary-500 transition-colors duration-200">
+              <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                <span class="text-sm font-medium text-primary-600">
+                  {{ getUserInitials() }}
+                </span>
+              </div>
+              <span class="hidden md:block text-sm font-medium">{{ userProfile?.email }}</span>
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+
+            <!-- Dropdown del menú de usuario -->
+            <div 
+              *ngIf="showUserMenu"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+              <a routerLink="/profile" 
+                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                Mi Perfil
+              </a>
+              <button 
+                (click)="onLogout()"
+                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #guestActions>
+          <!-- Acciones para usuarios no autenticados -->
+          <a routerLink="/login" 
+             class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200">
+            Iniciar Sesión
+          </a>
+          <a routerLink="/register" 
+             class="btn-primary">
+            Registrarse
+          </a>
+        </ng-template>
+
+        <!-- Botón de menú móvil -->
+        <button 
+          *ngIf="isAuthenticated"
+          (click)="toggleMobileMenu()"
+          class="md:hidden p-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-100 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div *ngIf="showMobileMenu && isAuthenticated" class="md:hidden border-t border-gray-200 py-4">
+      <nav class="flex flex-col space-y-2">
+        <a routerLink="/dashboard" 
+           routerLinkActive="text-primary-500 bg-primary-50"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+          Dashboard
+        </a>
+        <a routerLink="/breeds" 
+           routerLinkActive="text-primary-500 bg-primary-50"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+          Razas
+        </a>
+        <a routerLink="/images" 
+           routerLinkActive="text-primary-500 bg-primary-50"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+          Imágenes
+        </a>
+        <a routerLink="/search" 
+           routerLinkActive="text-primary-500 bg-primary-50"
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+          Búsqueda
+        </a>
+        <a routerLink="/profile" 
+           class="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+          Mi Perfil
+        </a>
+        <button 
+          (click)="onLogout()"
+          class="text-left text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200">
+          Cerrar Sesión
+        </button>
+      </nav>
+    </div>
+  </div>
+</header>
+
