@@ -4,7 +4,7 @@
  */
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'https://xpert-group-cat-backend.vercel.app',
   appName: 'Cats App',
   appVersion: '1.0.0',
   defaultLanguage: 'es',
